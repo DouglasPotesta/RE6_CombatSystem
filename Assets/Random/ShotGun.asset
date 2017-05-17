@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc8d0b3eb9acf442af9bc73e563a87e, type: 3}
+  m_Name: ShotGun
+  m_EditorClassIdentifier: 
+  Ammo: 10
+  clip: 10
+  clipSize: 10
+  projectiles: 1
+  variance: 0.1
+  delay: 0.01
+  blastsize: 0
+  particle: {fileID: 1526195627738266, guid: 5240eab31df6d49449efd162be19d550, type: 2}
+  tipOfBarrel: {fileID: 0}
+  anim: {fileID: 0}
+  fire: {fileID: 8300000, guid: b2662aff7ea65ef47b92cb7aba5fa483, type: 3}
+  click: {fileID: 8300000, guid: 627df0ea1de7efa489401e5c8741f406, type: 3}
+  reload: {fileID: 8300000, guid: a4778ddb4a103964abb1ef7de8cab65d, type: 3}
+  aim: {fileID: 8300000, guid: 627df0ea1de7efa489401e5c8741f406, type: 3}
+  alternate: {fileID: 8300000, guid: 627df0ea1de7efa489401e5c8741f406, type: 3}
+  audioSource: {fileID: 0}
