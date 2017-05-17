@@ -8,7 +8,7 @@ public class State_Combat : ICharacterState
 
 
     private float dampVelocity = 0;
-
+    private float refRotate;
     private StatePatternController player;
     public State_Combat(StatePatternController controller)
     {
@@ -141,13 +141,16 @@ public class State_Combat : ICharacterState
             Vector3 v = (player.anim.deltaPosition) / Time.deltaTime;
             if (player.speed > 0.1f)
             {
-                float x = player.aimCool ?
+                float y = player.aimCool ?
                     Mathf.Atan2(player.velocity.y, player.velocity.x) * Mathf.Rad2Deg * Time.deltaTime :
                 player.direction * 360 * Time.deltaTime;
-                player.transform.Rotate(0, x, 0);
+                player.charRotate.y = y;
+                player.transform.Rotate(player.charRotate);
             }
             // we preserve the existing y part of the current velocity.
+           
             v.y = player.rig.velocity.y;
+            
             player.rig.velocity = v;
         }
     }

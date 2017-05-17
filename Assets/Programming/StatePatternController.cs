@@ -22,8 +22,14 @@ public class StatePatternController : MonoBehaviour {
     public bool aimCool;
     public float charAngle;
     public float speed;
+    [HideInInspector]
+    public bool isPivoting = false;
+    [HideInInspector]
+    public Vector3 charRotate;
+    public Vector3 moveDirection;
     public float dampVelocity;
     public Vector3 velocity;
+
 
 
     public float directionDampTime = 0.1f;
@@ -71,12 +77,7 @@ public class StatePatternController : MonoBehaviour {
         velocity.x = Input.GetAxis("Horizontal");
         velocity.y = Input.GetAxis("Vertical");
         //if (velocity.sqrMagnitude > 0.1)
-        StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, velocity.x, velocity.y);
-        
-
-
-
-
+        StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
         currentState.Update();
 	}
 
@@ -87,26 +88,24 @@ public class StatePatternController : MonoBehaviour {
         anim.SetTrigger("Grab");
     }
 
-    public void StickToWorldSpace(Transform root, Transform camera, ref float directionOut, ref float speedOut, ref float angleOut, float directionx, float directiony)
+    public void StickToWorldSpace(Transform root, Transform camera, ref float directionOut, ref float speedOut, ref float angleOut, ref Vector3 MoveDirection, float directionx, float directiony, bool IsPivoting)
     {
         Vector3 rootDirection = root.forward;
         Vector3 stickDirection = new Vector3(directionx, 0, directiony);
-
         Vector3 CameraDirection = new Vector3(camera.forward.x, 0, camera.forward.z).normalized;
-
         Quaternion referentialShift = Quaternion.FromToRotation(Vector3.forward, CameraDirection);
-
-        Vector3 moveDirection = referentialShift * stickDirection;
+        MoveDirection = referentialShift * stickDirection;
         Vector3 axisSign = Vector3.Cross(moveDirection, rootDirection);
         //stickDirection = moveDirection;
         Debug.DrawRay(new Vector3(root.position.x, root.position.y + 1f, root.position.z), stickDirection, Color.blue, 0.1f);
-       
-        float angleRootToMove = Vector3.Angle (rootDirection, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
-        angleOut = angleRootToMove;
-
+        float angleRootToMove = Vector3.Angle (rootDirection, MoveDirection) * (axisSign.y >= 0 ? -1f : 1f);
+        if (!IsPivoting)
+        {
+            angleOut = angleRootToMove;
+        }
         angleRootToMove /= 180;
         directionOut = angleRootToMove;
-        Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), moveDirection, Color.red, 0.1f);
+        Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), MoveDirection, Color.red, 0.1f);
 
 
     }
@@ -136,10 +135,13 @@ public class StatePatternController : MonoBehaviour {
     
     public void SetAnimatorLocomotion()
     {
-        speed = Mathf.SmoothDamp(speed, velocity.magnitude > 1 ? 1 : velocity.magnitude, ref dampVelocity, 0.1f);
-        anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
-        anim.SetFloat("XDirection", Input.GetAxis("Horizontal"), 0.1f, Time.deltaTime);
-        anim.SetFloat("YDirection", Input.GetAxis("Vertical"), 0.1f, Time.deltaTime);
-        anim.SetFloat("Speed", velocity.magnitude > 1 ? 1 : velocity.magnitude, 0.1f, Time.deltaTime);
+            speed = Mathf.SmoothDamp(speed, velocity.magnitude > 1 ? 1 : velocity.magnitude, ref dampVelocity, 0.1f);
+            anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
+            anim.SetFloat("XDirection", Input.GetAxis("Horizontal"), 0.1f, Time.deltaTime);
+            anim.SetFloat("YDirection", Input.GetAxis("Vertical"), 0.1f, Time.deltaTime);
+        if (!isPivoting)
+        {
+            anim.SetFloat("Speed", velocity.magnitude > 1 ? 1 : velocity.magnitude, 0.1f, Time.deltaTime);
+        }
     }
 }

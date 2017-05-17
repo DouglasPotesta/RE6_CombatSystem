@@ -93,6 +93,8 @@ public class State_Grounded : ICharacterState
             player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight)*Time.deltaTime*x),0)) ;
             // we preserve the existing y part of the current velocity.
             v.y = player.rig.velocity.y;
+            v.x += player.velocity.x/3;
+            v.z += player.velocity.y/3;
             player.rig.velocity = v;
         }
     }
