@@ -24,6 +24,7 @@ public class State_Combat : ICharacterState
             player.anim.SetBool("Sprint", false);
         }else if (Input.GetButtonDown("Run"))
         {
+            // TODO set up a min and max for direction for when this is active, and focus camera behind the player
             player.anim.SetBool("Sprint", true);
         }
         if (player.aimCool)
