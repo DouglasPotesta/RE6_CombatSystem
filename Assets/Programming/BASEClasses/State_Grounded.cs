@@ -7,16 +7,16 @@ public class State_Grounded : ICharacterState
 {
 
     private StatePatternController player;
+
     public State_Grounded(StatePatternController controller)
     {
         player = controller;
     }
 
-
     public void Update()
     {
         //player.SetAnimatorLocomotion();
-        if (Input.GetAxis("Aim") < 0.5f)
+        if (Input.GetAxis("Aim") < 0.5f || (Input.GetButtonDown("Run") && player.anim.GetFloat("YDirection") > 0.5f))
         {
             ToCombat();
         }
@@ -57,7 +57,21 @@ public class State_Grounded : ICharacterState
 
     public void ToCombat()
     {
-        player.anim.SetBool("Aim", false);
+        if (Input.GetAxis("Aim")>0.5)
+        {
+            player.anim.SetBool("Aim", true);
+        }
+        else
+        {
+            player.anim.SetBool("Aim", false);
+        }
+        if (Input.GetButton("Run"))
+        {
+            player.anim.SetBool("Sprint", true);
+        } else
+        {
+            player.anim.SetBool("Sprint", false);
+        }
         player.currentState = player.combatState;
     }
 
@@ -93,8 +107,8 @@ public class State_Grounded : ICharacterState
             player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight)*Time.deltaTime*x),0)) ;
             // we preserve the existing y part of the current velocity.
             v.y = player.rig.velocity.y;
-            v.x += player.velocity.x/3;
-            v.z += player.velocity.y/3;
+            v += (player.transform.right * player.velocity.x + player.transform.forward*player.velocity.y);
+            v.y = player.rig.velocity.y;
             player.rig.velocity = v;
         }
     }

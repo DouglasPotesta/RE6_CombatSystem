@@ -19,6 +19,13 @@ public class State_Combat : ICharacterState
     {
 
         //player.SetAnimatorLocomotion();
+        if (Input.GetButtonUp("Run"))
+        {
+            player.anim.SetBool("Sprint", false);
+        }else if (Input.GetButtonDown("Run"))
+        {
+            player.anim.SetBool("Sprint", true);
+        }
         if (player.aimCool)
         {
             player.LookTowards(player.transform, player.camTarget.position, 10);
