@@ -26,7 +26,7 @@ public class State_Casual : ICharacterState {
             player.aimCool = true;
             player.anim.SetBool("Aim", true);
             player.cam.posTarget = player.camAim;
-            player.cam.lookTarget = player.camAim.GetChild(0);
+            player.cam.lookTarget = player.camAim.transform.GetChild(0);
             player.cam.dOF.focalTransform = player.cam.lookTarget;
             player.cam.dOF.enabled = true;
             player.cam.dOF.focalSize = 0.4f;
@@ -51,7 +51,7 @@ public class State_Casual : ICharacterState {
         if (Input.GetAxis("Aim") < 0.5f)
         {
             player.cam.posTarget = player.camDefault;
-            player.cam.lookTarget = player.camDefault.GetChild(0);
+            player.cam.lookTarget = player.camDefault.transform.GetChild(0);
             player.cam.dOF.focalTransform = player.cam.lookTarget;
             player.cam.dOF.enabled = false;
             player.aimCool = false;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 public class cameraTranslate : MonoBehaviour {
 
-    public Transform posTarget;
+    public CamStats posTarget;
     public Transform lookTarget;
     public Transform player;
     public float dampRotSpeed;
@@ -16,12 +16,12 @@ public class cameraTranslate : MonoBehaviour {
     {
         if (lookTarget == null)
         {
-            lookTarget = posTarget.GetChild(0);
+            lookTarget = posTarget.transform.GetChild(0);
         }
-        StatePatternController.SlerpForMe(transform, lookTarget.position, dampRotSpeed*Time.deltaTime);
-        CompensateForWalls(transform.position, posTarget, player.position, out  TargetPosition);
+        
+        CompensateForWalls(transform.position, posTarget.transform, player.position, out  TargetPosition);
         transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * dampPosSpeed);
-
+        
     }
 
     private void CompensateForWalls(Vector3 fromObject, Transform toTarget, Vector3 playerPosition, out Vector3 targetPosition)

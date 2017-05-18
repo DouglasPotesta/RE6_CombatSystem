@@ -10,6 +10,8 @@ public class followXZ : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = new Vector3 (target.position.x, transform.position.y, target.position.z) + offset;
+        offset = target.forward;
+        offset.y = 0;
+        transform.position = new Vector3 (target.position.x, transform.position.y, target.position.z)+ offset.normalized;
     }
 }

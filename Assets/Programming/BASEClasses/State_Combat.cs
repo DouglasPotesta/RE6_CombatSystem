@@ -32,8 +32,8 @@ public class State_Combat : ICharacterState
         {
             player.aimCool = true;
             player.anim.SetBool("Aim", true);
-            player.cam.posTarget = player.camAim;
-            player.cam.lookTarget = player.camAim.GetChild(0);
+            player.StartCoroutine(player.CamTransition(player.camAim, player.cam));
+            player.cam.lookTarget = player.camAim.transform.GetChild(0);
             player.cam.dOF.focalTransform = player.cam.lookTarget;
             player.cam.dOF.enabled = true;
             player.cam.dOF.focalSize = 0.4f;
@@ -56,10 +56,11 @@ public class State_Combat : ICharacterState
             player.meleeCool = false;
             player.anim.SetBool("Fire", false);
         }
-        if (Input.GetAxis("Aim") < 0.5f)
+        if (Input.GetAxis("Aim") < 0.5f && player.aimCool)
         {
+            player.StartCoroutine(player.CamTransition(player.camDefault, player.cam));
             player.cam.posTarget = player.camDefault;
-            player.cam.lookTarget = player.camDefault.GetChild(0);
+            player.cam.lookTarget = player.camDefault.transform.GetChild(0);
             player.cam.dOF.focalTransform = player.cam.lookTarget;
             player.cam.dOF.enabled = false;
             player.aimCool = false;
@@ -104,8 +105,7 @@ public class State_Combat : ICharacterState
     public void ToGround()
     {
         player.anim.SetBool("Sprint", true);
-        player.cam.posTarget = player.camGround;
-        
+        player.StartCoroutine(player.CamTransition(player.camGround, player.cam));
         player.currentState = player.groundedState;
         player.StartCoroutine(TransitionTo());
     }
@@ -139,11 +139,20 @@ public class State_Combat : ICharacterState
         if (Time.deltaTime > 0)
         {
             Vector3 v = (player.anim.deltaPosition) / Time.deltaTime;
-            if (player.speed > 0.1f)
+            if (player.speed > 0.1f && !player.isPivoting)
             {
-                float y = player.aimCool ?
-                    Mathf.Atan2(player.velocity.y, player.velocity.x) * Mathf.Rad2Deg * Time.deltaTime :
-                player.direction * 360 * Time.deltaTime;
+                float y;
+                if (player.isPivoting)
+                {
+                    y = player.anim.GetFloat("Direction") * 360 * Time.deltaTime;
+                }
+                else
+                {
+                    y = player.aimCool ?
+                        Mathf.Atan2(player.velocity.y, player.velocity.x) * Mathf.Rad2Deg * Time.deltaTime :
+                    player.direction * 360 * Time.deltaTime;
+                }
+            
                 player.charRotate.y = y;
                 player.transform.Rotate(player.charRotate);
             }

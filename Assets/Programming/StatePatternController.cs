@@ -5,10 +5,10 @@ using UnityEngine;
 public class StatePatternController : MonoBehaviour {
 
     public cameraTranslate cam;
-    public Transform camAim;
-    public Transform camRun;
-    public Transform camGround;
-    public Transform camDefault;
+    public CamStats camAim;
+    public CamStats camRun;
+    public CamStats camGround;
+    public CamStats camDefault;
     public Collider col;
     public Animator anim;
     public Rigidbody rig;
@@ -33,6 +33,8 @@ public class StatePatternController : MonoBehaviour {
 
 
     public float directionDampTime = 0.1f;
+
+    public float speedDampTime = 0.1f;
 
     public ICharacterState currentState;
     public State_Hurt hurtState;
@@ -77,7 +79,7 @@ public class StatePatternController : MonoBehaviour {
         velocity.x = Input.GetAxis("Horizontal");
         velocity.y = Input.GetAxis("Vertical");
         //if (velocity.sqrMagnitude > 0.1)
-        StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
+            StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
         currentState.Update();
 	}
 
@@ -118,7 +120,23 @@ public class StatePatternController : MonoBehaviour {
         SetAnimatorLocomotion();
     }
 
-
+    public IEnumerator CamTransition(CamStats camStat, cameraTranslate cam) // remove this for a callable function in update
+    {
+        cam.dampPosSpeed = camStat.transitionSpeed;
+        cam.posTarget = camStat;
+        cam.lookTarget = camStat.transform.GetChild(0);
+        cam.dampRotSpeed = 10; // TODO fix this so that way the rotation of the camera is consistent throughout the transition
+        float x = 0;
+        while (cam.dampPosSpeed < camStat.dampSpeed)
+        {
+            x += Time.deltaTime/1.5f;
+            cam.dampPosSpeed = Mathf.Lerp(cam.dampPosSpeed, camStat.dampSpeed, x);
+            cam.dampRotSpeed = Mathf.Lerp(cam.dampRotSpeed, camStat.dampRot, x);
+            yield return new WaitForEndOfFrame();
+        }
+        cam.dampPosSpeed = camStat.dampSpeed;
+        cam.dampRotSpeed = camStat.dampRot;
+    }
 
     public static void SlerpForMe(Transform looker, Vector3 target, float damping)
     {
@@ -136,12 +154,13 @@ public class StatePatternController : MonoBehaviour {
     public void SetAnimatorLocomotion()
     {
             speed = Mathf.SmoothDamp(speed, velocity.magnitude > 1 ? 1 : velocity.magnitude, ref dampVelocity, 0.1f);
-            anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
+            
             anim.SetFloat("XDirection", Input.GetAxis("Horizontal"), 0.1f, Time.deltaTime);
             anim.SetFloat("YDirection", Input.GetAxis("Vertical"), 0.1f, Time.deltaTime);
         if (!isPivoting)
         {
-            anim.SetFloat("Speed", velocity.magnitude > 1 ? 1 : velocity.magnitude, 0.1f, Time.deltaTime);
+            anim.SetFloat("Speed", velocity.magnitude > 1 ? 1 : velocity.magnitude, speedDampTime , Time.deltaTime);
+            anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
         }
     }
 }
