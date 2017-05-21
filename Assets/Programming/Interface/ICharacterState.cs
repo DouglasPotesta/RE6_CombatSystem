@@ -30,5 +30,7 @@ public interface ICharacterState {
 
     void ToGround();
 
+    void ToRun();
+
 
 }

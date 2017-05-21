@@ -67,6 +67,11 @@ public class State_Interaction : ICharacterState
         throw new NotImplementedException();
     }
 
+    public void ToRun()
+    {
+        throw new NotImplementedException();
+    }
+
     public void Update()
     {
         throw new NotImplementedException();

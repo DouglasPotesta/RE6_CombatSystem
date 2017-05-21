@@ -21,11 +21,11 @@ public class State_Combat : ICharacterState
         //player.SetAnimatorLocomotion();
         if (Input.GetButtonUp("Run"))
         {
-            player.anim.SetBool("Sprint", false);
+            
         }else if (Input.GetButtonDown("Run"))
         {
-            // TODO set up a min and max for direction for when this is active, and focus camera behind the player
-            player.anim.SetBool("Sprint", true);
+            
+            ToRun();
         }
         if (player.aimCool)
         {
@@ -53,11 +53,14 @@ public class State_Combat : ICharacterState
             }
 
         }
-        else if (Input.GetAxis("Shoot") > 0.5f && !player.meleeCool)
+        else if (Input.GetAxis("Shoot") > 0.5f)
         {
-            player.meleeCool = true;
-            player.anim.SetBool("Fire", true);
-
+            if (!player.meleeCool)
+            {
+                player.meleeCool = true;
+            }
+            player.anim.SetTrigger("Melee");
+        
         }
         if (Input.GetAxis("Shoot") < 0.5f)
         {
@@ -170,5 +173,11 @@ public class State_Combat : ICharacterState
             
             player.rig.velocity = v;
         }
+    }
+
+    public void ToRun()
+    {
+        player.anim.SetBool("Sprint", true);
+        player.currentState = player.runState;
     }
 }

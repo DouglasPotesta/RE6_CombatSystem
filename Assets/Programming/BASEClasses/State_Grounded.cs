@@ -112,4 +112,9 @@ public class State_Grounded : ICharacterState
             player.rig.velocity = v;
         }
     }
+
+    public void ToRun()
+    {
+        throw new NotImplementedException();
+    }
 }

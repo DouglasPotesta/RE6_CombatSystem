@@ -40,6 +40,7 @@ public class StatePatternController : MonoBehaviour {
     public State_Hurt hurtState;
     public State_Casual casualState;
     public State_Grounded groundedState;
+    public State_Run runState;
     public State_Combat combatState;
     public State_Interaction interactionState;
     
@@ -51,6 +52,7 @@ public class StatePatternController : MonoBehaviour {
         groundedState = new State_Grounded(this);
         combatState = new State_Combat(this);
         interactionState = new State_Interaction(this);
+        runState = new State_Run(this);
     }
 
 
@@ -80,6 +82,7 @@ public class StatePatternController : MonoBehaviour {
         velocity.y = Input.GetAxis("Vertical");
         //if (velocity.sqrMagnitude > 0.1)
             StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
+        print(currentState);
         currentState.Update();
 	}
 

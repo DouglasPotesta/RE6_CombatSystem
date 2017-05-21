@@ -127,4 +127,9 @@ public class State_Casual : ICharacterState {
             player.rig.velocity = v;
         }
     }
+
+    public void ToRun()
+    {
+        throw new NotImplementedException();
+    }
 }

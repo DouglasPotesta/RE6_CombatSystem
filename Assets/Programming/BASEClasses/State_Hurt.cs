@@ -66,6 +66,11 @@ public class State_Hurt : ICharacterState
         throw new NotImplementedException();
     }
 
+    public void ToRun()
+    {
+        throw new NotImplementedException();
+    }
+
     public void Update()
     {
         throw new NotImplementedException();
