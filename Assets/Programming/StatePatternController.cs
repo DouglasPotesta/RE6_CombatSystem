@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class StatePatternController : MonoBehaviour {
 
@@ -12,7 +13,6 @@ public class StatePatternController : MonoBehaviour {
     public Collider col;
     public Animator anim;
     public Rigidbody rig;
-
     public Transform camTarget;
 
     public WeaponInventory weapons;
@@ -30,7 +30,12 @@ public class StatePatternController : MonoBehaviour {
     public float dampVelocity;
     public Vector3 velocity;
 
+    public NavMeshHit yHolder;
+    public enum areaMaskBinaries { EVERYTHING = 1, NOTWALKABLE = 2, JUMP = 4, GROUNDABLE = 8 }
 
+
+    public areaMaskBinaries[] areaMask;
+    public int areaMaskInt { get { int x =0;  foreach (areaMaskBinaries ms in areaMask) { x += (int)ms; } return x; }}
 
     public float directionDampTime = 0.1f;
 
@@ -84,7 +89,8 @@ public class StatePatternController : MonoBehaviour {
             StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
         print(currentState);
         currentState.Update();
-	}
+        SetAnimatorLocomotion();
+    }
 
     void Grab (GameObject other)
     {
@@ -116,11 +122,14 @@ public class StatePatternController : MonoBehaviour {
     }
     public void OnAnimatorMove()
     {
+        
         currentState.OnAnimatorMove();
     }
     public void FixedUpdate()
     {
-        SetAnimatorLocomotion();
+        NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
+        transform.position = yHolder.position;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
+
     }
 
     public IEnumerator CamTransition(CamStats camStat, cameraTranslate cam) // remove this for a callable function in update
@@ -132,8 +141,8 @@ public class StatePatternController : MonoBehaviour {
         float x = 0;
         while (cam.dampPosSpeed < camStat.dampSpeed)
         {
-            x += Time.deltaTime/1.5f;
-            cam.dampPosSpeed = Mathf.Lerp(cam.dampPosSpeed, camStat.dampSpeed, x);
+            x += Time.deltaTime*1.5f;
+            cam.dampPosSpeed = Mathf.Lerp(camStat.transitionSpeed, camStat.dampSpeed, 1);
             cam.dampRotSpeed = Mathf.Lerp(cam.dampRotSpeed, camStat.dampRot, x);
             yield return new WaitForEndOfFrame();
         }
@@ -157,13 +166,56 @@ public class StatePatternController : MonoBehaviour {
     public void SetAnimatorLocomotion()
     {
             speed = Mathf.SmoothDamp(speed, velocity.magnitude > 1 ? 1 : velocity.magnitude, ref dampVelocity, 0.1f);
-            
-            anim.SetFloat("XDirection", Input.GetAxis("Horizontal"), 0.1f, Time.deltaTime);
+        
+        anim.SetFloat("XDirection", Input.GetAxis("Horizontal"), 0.1f, Time.deltaTime);
             anim.SetFloat("YDirection", Input.GetAxis("Vertical"), 0.1f, Time.deltaTime);
         if (!isPivoting)
         {
-            anim.SetFloat("Speed", velocity.magnitude > 1 ? 1 : velocity.magnitude, speedDampTime , Time.deltaTime);
+            anim.SetFloat("Speed", speed > 0.1f ? speed : 0, speedDampTime , Time.deltaTime);
             anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
         }
+    }
+    /// <summary>
+    /// Checks what input the user is currently doing to adequately reassign bools in the animator and state during transitions
+    /// </summary>
+    public void InputTransitionCheck()
+    {
+
+        // Firing and Melee bools
+        if (Input.GetAxis("Aim") > 0.5f)
+        {
+            anim.SetBool("Aim", true);
+            if (Input.GetAxis("Shoot") > 0.5f)
+            {
+                anim.SetBool("Fire", true);
+            } else
+            {
+                anim.SetBool("Fire", false);
+            }
+        } else
+        {
+            anim.SetBool("Aim", false);
+
+            if (Input.GetAxis("Shoot") > 0.5f)
+            {
+                anim.SetTrigger("Melee");
+            }
+        }
+        if (Input.GetButton("Run"))
+        {
+            anim.SetBool("Sprint", true);
+        }else
+        {
+            anim.SetBool("Sprint", false);
+        }
+        if (Input.GetButton("Run"))
+        {
+            anim.SetBool("Sprint", true);
+        }
+        else
+        {
+            anim.SetBool("Sprint", false);
+        }
+
     }
 }

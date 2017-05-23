@@ -31,12 +31,12 @@ public class cameraTranslate : MonoBehaviour {
         RaycastHit wallHit = new RaycastHit();
         if(Physics.Linecast(playerPosition, toTarget.position, out wallHit, physicsMask))
         {
-            Debug.DrawRay(wallHit.point, Vector3.left, Color.red);
-            targetPosition = new Vector3(wallHit.point.x + wallHit.normal.x / 5, toTarget.position.y + wallHit.normal.y / 5, wallHit.point.z + wallHit.normal.z / 5);
+            //Debug.DrawRay(wallHit.point, Vector3.left, Color.red);
+            targetPosition = Vector3.Lerp(transform.position, new Vector3(wallHit.point.x + wallHit.normal.x / 5, toTarget.position.y + wallHit.normal.y / 5, wallHit.point.z + wallHit.normal.z / 5), 0.1f);
 
         } else
         {
-            targetPosition = toTarget.position;
+            targetPosition = Vector3.Lerp(transform.position, toTarget.position, 0.1f);
         }
     }
 

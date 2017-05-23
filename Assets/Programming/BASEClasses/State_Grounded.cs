@@ -57,21 +57,7 @@ public class State_Grounded : ICharacterState
 
     public void ToCombat()
     {
-        if (Input.GetAxis("Aim")>0.5)
-        {
-            player.anim.SetBool("Aim", true);
-        }
-        else
-        {
-            player.anim.SetBool("Aim", false);
-        }
-        if (Input.GetButton("Run"))
-        {
-            player.anim.SetBool("Sprint", true);
-        } else
-        {
-            player.anim.SetBool("Sprint", false);
-        }
+        player.InputTransitionCheck();
         player.currentState = player.combatState;
     }
 

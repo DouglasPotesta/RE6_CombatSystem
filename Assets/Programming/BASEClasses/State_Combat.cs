@@ -10,6 +10,7 @@ public class State_Combat : ICharacterState
     private float dampVelocity = 0;
     private float refRotate;
     private StatePatternController player;
+    private bool IsAiming = false;
     public State_Combat(StatePatternController controller)
     {
         player = controller;
@@ -19,65 +20,64 @@ public class State_Combat : ICharacterState
     {
 
         //player.SetAnimatorLocomotion();
-        if (Input.GetButtonUp("Run"))
+        if (Input.GetButton("Run"))
         {
-            
-        }else if (Input.GetButtonDown("Run"))
-        {
-            
             ToRun();
         }
-        if (player.aimCool)
+        else
+        {
+
+        }
+        if (Input.GetAxis ("Aim") > 0.5f) // If player is trying to aim
         {
             player.LookTowards(player.transform, player.camTarget.position, 10);
-            if (Input.GetButtonDown("Run") && player.speed > 0.8f)
+            if (Input.GetAxis("Shoot") > 0.5f && !IsAiming)
+            {
+                //TODO implement a quickshot
+            }
+            else if (!IsAiming)//  Initializes aiming
+            {
+                AimStart();
+            }
+
+            if (Input.GetButtonDown("Run") && player.speed > 0.8f) // Diving in a direction
             {
                 ToGround();
-                
             }
-        }
-        if (Input.GetAxis("Aim") > 0.5f && !player.aimCool)
+        } else // when the player is not trying to aim
         {
-            player.aimCool = true;
-            player.anim.SetBool("Aim", true);
-            player.StartCoroutine(player.CamTransition(player.camAim, player.cam));
-            player.cam.lookTarget = player.camAim.transform.GetChild(0);
-            player.cam.dOF.focalTransform = player.cam.lookTarget;
-            player.cam.dOF.enabled = true;
-            player.cam.dOF.focalSize = 0.4f;
-            player.cam.dOF.aperture = 0.507f;
-            if (Input.GetAxis("Shoot") < 0.5f)
+            if (IsAiming)
             {
-                //QuickShot
-                player.meleeCool = false;
+                AimEnd();
             }
-
-        }
-        else if (Input.GetAxis("Shoot") > 0.5f)
-        {
-            if (!player.meleeCool)
+            if (Input.GetAxis("Shoot") > 0.5f)
             {
-                player.meleeCool = true;
+                player.anim.SetTrigger("Melee");
             }
-            player.anim.SetTrigger("Melee");
-        
         }
-        if (Input.GetAxis("Shoot") < 0.5f)
-        {
-            player.meleeCool = false;
-            player.anim.SetBool("Fire", false);
-        }
-        if (Input.GetAxis("Aim") < 0.5f && player.aimCool)
-        {
-            player.StartCoroutine(player.CamTransition(player.camDefault, player.cam));
-            player.cam.posTarget = player.camDefault;
-            player.cam.lookTarget = player.camDefault.transform.GetChild(0);
-            player.cam.dOF.focalTransform = player.cam.lookTarget;
-            player.cam.dOF.enabled = false;
-            player.aimCool = false;
-            player.anim.SetBool("Aim", false);
-        }
+    }
 
+    private void AimEnd()
+    {
+        player.StartCoroutine(player.CamTransition(player.camDefault, player.cam));
+        player.cam.posTarget = player.camDefault;
+        player.cam.lookTarget = player.camDefault.transform.GetChild(0);
+        player.cam.dOF.focalTransform = player.cam.lookTarget;
+        player.cam.dOF.enabled = false;
+        player.anim.SetBool("Aim", false);
+        IsAiming = false;
+    }
+
+    private void AimStart()
+    {
+        player.anim.SetBool("Aim", true);
+        player.StartCoroutine(player.CamTransition(player.camAim, player.cam));
+        player.cam.lookTarget = player.camAim.transform.GetChild(0);
+        player.cam.dOF.focalTransform = player.cam.lookTarget;
+        player.cam.dOF.enabled = true;
+        player.cam.dOF.focalSize = 0.4f;
+        player.cam.dOF.aperture = 0.507f;
+        IsAiming = true;
     }
 
     public void SwitchWeapon(WeaponBehaviour weapon)
@@ -115,10 +115,10 @@ public class State_Combat : ICharacterState
 
     public void ToGround()
     {
-        player.anim.SetBool("Sprint", true);
+        player.InputTransitionCheck();
         player.StartCoroutine(player.CamTransition(player.camGround, player.cam));
         player.currentState = player.groundedState;
-        player.StartCoroutine(TransitionTo());
+        //player.StartCoroutine(TransitionTo()); Coroutine implementation 
     }
 
     IEnumerator TransitionTo()
@@ -159,7 +159,7 @@ public class State_Combat : ICharacterState
                 }
                 else
                 {
-                    y = player.aimCool ?
+                    y = IsAiming ?
                         Mathf.Atan2(player.velocity.y, player.velocity.x) * Mathf.Rad2Deg * Time.deltaTime :
                     player.direction * 360 * Time.deltaTime;
                 }
@@ -177,7 +177,7 @@ public class State_Combat : ICharacterState
 
     public void ToRun()
     {
-        player.anim.SetBool("Sprint", true);
+        player.InputTransitionCheck();
         player.currentState = player.runState;
     }
 }

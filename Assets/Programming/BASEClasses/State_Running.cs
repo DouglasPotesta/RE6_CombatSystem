@@ -24,6 +24,17 @@ public class State_Run : ICharacterState
         {
             player.anim.SetTrigger("Melee");
         }
+        if (Input.GetAxis("Aim") > 0.5f)
+        {
+            player.anim.SetBool("Aim", true);
+            ToGround();
+        }
+        if (player.speed < 0.1f)
+        {
+
+            player.anim.SetFloat("Speed", 0);
+            ToCombat();
+        }
     }
 
     public void OnAnimatorMove()
@@ -31,20 +42,10 @@ public class State_Run : ICharacterState
         if (Time.deltaTime > 0)
         {
             Vector3 v = (player.anim.deltaPosition) / Time.deltaTime;
-            if (player.speed > 0.1f && !player.isPivoting)
+            if (player.speed > 0.1f) // when the player is not pivoting he 
             {
                 float y;
-                if (player.isPivoting)
-                {
-                    y = player.anim.GetFloat("Direction") * 360 * Time.deltaTime;
-                }
-                else
-                {
-                    y = player.aimCool ?
-                        Mathf.Atan2(player.velocity.y, player.velocity.x) * Mathf.Rad2Deg * Time.deltaTime :
-                    player.direction * 360 * Time.deltaTime;
-                }
-
+                    y = player.direction * 360 * Time.deltaTime;
                 player.charRotate.y = y/4;
                 player.transform.Rotate(player.charRotate);
             }
@@ -83,13 +84,17 @@ public class State_Run : ICharacterState
 
     public void ToCombat()
     {
+        player.InputTransitionCheck();
+
         player.anim.SetBool("Sprint", false);
         player.currentState = player.combatState;
     }
 
     public void ToGround()
     {
-        throw new NotImplementedException();
+        player.InputTransitionCheck();
+        player.StartCoroutine(player.CamTransition(player.camGround, player.cam));
+        player.currentState = player.groundedState;
     }
 
     public void ToHurt()
