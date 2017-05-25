@@ -135,6 +135,8 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
+  m_AllowMSAA: 1
+  m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
@@ -259,24 +261,97 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ec5cf00ca181d45a42ba1870e148c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  anim: {fileID: 0}
-  rig: {fileID: 0}
-  direction: 0
-  meleeCool: 0
-  jump: 0
-  charAngle: 0
-  speed: 0
-  rootSpeed: 0
-  dampVelocity: 0
-  input: {x: 0, y: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  rootOffsetAMount: {x: 0, y: 0, z: 0}
-  jumpdir: {x: 0, y: 0, z: 0}
-  physmask:
-    serializedVersion: 2
-    m_Bits: 0
-  directionDampTime: 0.1
+  m_IsWalking: 0
+  m_WalkSpeed: 2
+  m_RunSpeed: 5
+  m_RunstepLenghten: 0.7
+  m_JumpSpeed: 5
+  m_StickToGroundForce: 10
+  m_GravityMultiplier: 2
+  m_MouseLook:
+    XSensitivity: 2
+    YSensitivity: 2
+    clampVerticalRotation: 1
+    MinimumX: -90
+    MaximumX: 90
+    smooth: 0
+    smoothTime: 5
+    lockCursor: 1
+  m_UseFovKick: 1
+  m_FovKick:
+    Camera: {fileID: 0}
+    originalFov: 0
+    FOVIncrease: 3
+    TimeToIncrease: 1
+    TimeToDecrease: 1
+    IncreaseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_UseHeadBob: 1
+  m_HeadBob:
+    HorizontalBobRange: 0.05
+    VerticalBobRange: 0.05
+    Bobcurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 0.5
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1.5
+        value: -1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 2
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    VerticaltoHorizontalRatio: 2
+  m_JumpBob:
+    BobDuration: 0.2
+    BobAmount: 0.05
+  m_StepInterval: 5
+  m_FootstepSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  m_JumpSound: {fileID: 8300000, guid: 4668524a5ab640d40a5a71b495a77c87, type: 3}
+  m_LandSound: {fileID: 8300000, guid: 4668524a5ab640d40a5a71b495a77c87, type: 3}
 --- !u!114 &11400786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -324,11 +399,7 @@ MonoBehaviour:
     scale: 1
   vignette:
     enabled: 1
-    color:
-      r: 0
-      g: 0
-      b: 0
-      a: 1
+    color: {r: 0, g: 0, b: 0, a: 1}
     center: {x: 0.5, y: 0.5}
     intensity: 1.23
     smoothness: 0.8
@@ -337,11 +408,7 @@ MonoBehaviour:
     desaturate: 0
   chromaticAberration:
     enabled: 1
-    color:
-      r: 0
-      g: 1
-      b: 0
-      a: 1
+    color: {r: 0, g: 1, b: 0, a: 1}
     amount: 1.5
   m_Shader: {fileID: 4800000, guid: 136ab50fe2b9ad64d9c22adc3668abb7, type: 3}
 --- !u!114 &11405934
@@ -485,13 +552,16 @@ MonoBehaviour:
     tonemapper: 6
     exposure: 2
     curve:
+      serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 1
         outSlope: 1
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 1
         inSlope: 1
         outSlope: 1
@@ -513,21 +583,9 @@ MonoBehaviour:
     enabled: 1
     precision: 16
     colorWheels:
-      shadows:
-        r: 1
-        g: 0.9999
-        b: 0.999975
-        a: 1
-      midtones:
-        r: 0.9855978
-        g: 0.9252806
-        b: 1
-        a: 1
-      highlights:
-        r: 1
-        g: 0.74163604
-        b: 0.373097
-        a: 1
+      shadows: {r: 1, g: 0.9999, b: 0.999975, a: 1}
+      midtones: {r: 0.9855978, g: 0.9252806, b: 1, a: 1}
+      highlights: {r: 1, g: 0.74163604, b: 0.373097, a: 1}
     basics:
       temperatureShift: -0.04
       tint: -0.27
@@ -546,13 +604,16 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 1}
     curves:
       master:
+        serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 0
           inSlope: 1
           outSlope: 1
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 1
           outSlope: 1
@@ -561,13 +622,16 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
       red:
+        serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 0
           inSlope: 1
           outSlope: 1
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 1
           outSlope: 1
@@ -576,13 +640,16 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
       green:
+        serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 0
           inSlope: 1
           outSlope: 1
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 1
           outSlope: 1
@@ -591,13 +658,16 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
       blue:
+        serializedVersion: 2
         m_Curve:
-        - time: 0
+        - serializedVersion: 2
+          time: 0
           value: 0
           inSlope: 1
           outSlope: 1
           tangentMode: 0
-        - time: 1
+        - serializedVersion: 2
+          time: 1
           value: 1
           inSlope: 1
           outSlope: 1
@@ -736,7 +806,6 @@ AudioReverbZone:
   m_Reverb: -191
   m_ReverbDelay: 0.011
   m_HFReference: 5000
-  m_RoomRolloffFactor: 0
   m_Diffusion: 100
   m_Density: 100
   m_LFReference: 250

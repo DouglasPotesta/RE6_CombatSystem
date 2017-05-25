@@ -86,32 +86,43 @@ public class StatePatternController : MonoBehaviour {
         currentState.OnTriggerExit(other);
     }
 
-    // Update is called once per frame
     void Update () {
         velocity.x = Input.GetAxis("Horizontal");
         velocity.y = Input.GetAxis("Vertical");
-        //if (velocity.sqrMagnitude > 0.1)
-            StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, ref moveDirection, velocity.x, velocity.y, isPivoting);
+        StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, velocity.x, velocity.y, isPivoting);
         print(currentState);
         currentState.Update();
         SetAnimatorLocomotion();
     }
-
-    void Grab (GameObject other)
+    /// <summary>
+    /// Used for grabbing items and breaking item boxes
+    /// </summary>
+    /// <param name="other"></param>
+    void Grab (GameObject other) // need to implement 
     {
         anim.SetLayerWeight(anim.GetLayerIndex("EnvironmentInteraction"), 1.0f);
         anim.SetFloat("Height", other.transform.position.y - transform.position.y);
         anim.SetTrigger("Grab");
     }
-
-    public void StickToWorldSpace(Transform root, Transform camera, ref float directionOut, ref float speedOut, ref float angleOut, ref Vector3 MoveDirection, float directionx, float directiony, bool IsPivoting)
+    /// <summary>
+    /// Converts the stick movement into a single direction float based on the direction the character is facing relative to the camera. 0 being forward -0.5f being left, 0.5f being right. -1 and 1 are both back. 
+    /// </summary>
+    /// <param name="root">character's root transform</param>
+    /// <param name="camera">camera's transform</param>
+    /// <param name="directionOut"></param>
+    /// <param name="speedOut"> the out parameter for speed</param>
+    /// <param name="angleOut">the out parameter for direction</param>
+    /// <param name="directionx">The x axis of the stick</param>
+    /// <param name="directiony">The y axis of the stick</param>
+    /// <param name="IsPivoting"> Whether the character is pivoting</param>
+    public void StickToWorldSpace(Transform root, Transform camera, ref float directionOut, ref float speedOut, ref float angleOut, float directionx, float directiony, bool IsPivoting)
     {
         Vector3 rootDirection = root.forward;
         Vector3 stickDirection = new Vector3(directionx, 0, directiony);
         Vector3 CameraDirection = new Vector3(camera.forward.x, 0, camera.forward.z).normalized;
         Quaternion referentialShift = Quaternion.FromToRotation(Vector3.forward, CameraDirection);
-        MoveDirection = referentialShift * stickDirection;
-        Vector3 axisSign = Vector3.Cross(moveDirection, rootDirection);
+        Vector3 MoveDirection = referentialShift * stickDirection;
+        Vector3 axisSign = Vector3.Cross(MoveDirection, rootDirection);
         //stickDirection = moveDirection;
         Debug.DrawRay(new Vector3(root.position.x, root.position.y + 1f, root.position.z), stickDirection, Color.blue, 0.1f);
         float angleRootToMove = Vector3.Angle (rootDirection, MoveDirection) * (axisSign.y >= 0 ? -1f : 1f);
@@ -133,10 +144,15 @@ public class StatePatternController : MonoBehaviour {
     public void FixedUpdate()
     {
         NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
-        transform.position = yHolder.position - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
+        transform.position = yHolder.position;// - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
 
     }
-
+    /// <summary>
+    /// Controls the camera's transition from one state to the next.
+    /// </summary>
+    /// <param name="camStat"> the target containing the new information for the camera</param>
+    /// <param name="cam">The camera to transition</param>
+    /// <returns></returns>
     public IEnumerator CamTransition(CamStats camStat, cameraTranslate cam) // remove this for a callable function in update
     {
         cam.dampPosSpeed = camStat.transitionSpeed;
@@ -154,12 +170,23 @@ public class StatePatternController : MonoBehaviour {
         cam.dampPosSpeed = camStat.dampSpeed;
         cam.dampRotSpeed = camStat.dampRot;
     }
-
+    /// <summary>
+    /// a basic slerp function for making targets smoothly look at other targets
+    /// </summary>
+    /// <param name="looker"></param>
+    /// <param name="target"></param>
+    /// <param name="damping"></param>
     public static void SlerpForMe(Transform looker, Vector3 target, float damping)
     {
         var rotation = Quaternion.LookRotation(target - looker.position);
         looker.transform.rotation = Quaternion.Slerp(looker.transform.rotation, rotation, Time.deltaTime * damping);
     }
+    /// <summary>
+    /// a slerp function for making a target look in a direction based only on the x and z position of the target
+    /// </summary>
+    /// <param name="looker"></param>
+    /// <param name="target"></param>
+    /// <param name="damping"></param>
     public void LookTowards(Transform looker, Vector3 target, float damping)
     {
         target.y = 0;

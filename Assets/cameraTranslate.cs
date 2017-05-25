@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
+/// <summary>
+/// Controls the main camera's translation movement.
+/// </summary>
 public class cameraTranslate : MonoBehaviour {
 
     public CamStats posTarget;
@@ -23,7 +26,13 @@ public class cameraTranslate : MonoBehaviour {
         transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * dampPosSpeed);
         
     }
-
+    /// <summary>
+    /// Pushes the camera out from the wall based on what layermask you pass it
+    /// </summary>
+    /// <param name="fromObject"></param>
+    /// <param name="toTarget"></param>
+    /// <param name="playerPosition"></param>
+    /// <param name="targetPosition"></param>
     private void CompensateForWalls(Vector3 fromObject, Transform toTarget, Vector3 playerPosition, out Vector3 targetPosition)
     {
         Debug.DrawLine(fromObject, toTarget.position, Color.cyan);
@@ -32,11 +41,11 @@ public class cameraTranslate : MonoBehaviour {
         if(Physics.Linecast(playerPosition, toTarget.position, out wallHit, physicsMask))
         {
             //Debug.DrawRay(wallHit.point, Vector3.left, Color.red);
-            targetPosition = Vector3.Lerp(transform.position, new Vector3(wallHit.point.x + wallHit.normal.x / 5, toTarget.position.y + wallHit.normal.y / 5, wallHit.point.z + wallHit.normal.z / 5), 0.1f);
+            targetPosition = Vector3.Lerp(transform.position, new Vector3(wallHit.point.x + wallHit.normal.x / 10, toTarget.position.y + wallHit.normal.y / 10, wallHit.point.z + wallHit.normal.z / 10), 0.8f);
 
         } else
         {
-            targetPosition = Vector3.Lerp(transform.position, toTarget.position, 0.1f);
+            targetPosition = Vector3.Lerp(transform.position, toTarget.position, 0.8f);
         }
     }
 

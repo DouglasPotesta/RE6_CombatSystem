@@ -1,7 +1,6 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 // Upgrade NOTE: commented out 'float4x4 _WorldToCamera', a built-in variable
 // Upgrade NOTE: replaced '_WorldToCamera' with 'unity_WorldToCamera'
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
 Shader "Hidden/Image Effects/Cinematic/AmbientOcclusion"
 {
