@@ -29,7 +29,7 @@ public class StatePatternController : MonoBehaviour {
     public Vector3 moveDirection;
     public float dampVelocity;
     public Vector3 velocity;
-
+    public float ATTACKRANGE = 1;
     public NavMeshHit yHolder;
     public enum areaMaskBinaries { EVERYTHING = 1, NOTWALKABLE = 2, JUMP = 4, GROUNDABLE = 8 }
 
@@ -40,6 +40,10 @@ public class StatePatternController : MonoBehaviour {
     public float directionDampTime = 0.1f;
 
     public float speedDampTime = 0.1f;
+
+    public class Zombie : MonoBehaviour { }
+    public LayerMask zombieLayerMask;
+    public GameObject enemy;
 
     public ICharacterState currentState;
     public State_Hurt hurtState;
@@ -64,6 +68,7 @@ public class StatePatternController : MonoBehaviour {
     void Start () {
         rig = GetComponent<Rigidbody>();
         currentState = combatState;
+        StartCoroutine(EnemyCheck());
 	}
 
     void OnTriggerEnter(Collider other)
@@ -128,7 +133,7 @@ public class StatePatternController : MonoBehaviour {
     public void FixedUpdate()
     {
         NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
-        transform.position = yHolder.position;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
+        transform.position = yHolder.position - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
 
     }
 
@@ -173,6 +178,22 @@ public class StatePatternController : MonoBehaviour {
         {
             anim.SetFloat("Speed", speed > 0.1f ? speed : 0, speedDampTime , Time.deltaTime);
             anim.SetFloat("Direction", direction, 0.1f, Time.deltaTime);
+        }
+    }
+
+    IEnumerator EnemyCheck() // Sets the closest enemy target for melee combat
+    {
+        RaycastHit[] hits;
+        while (true)
+        {
+             hits = Physics.SphereCastAll(transform.position, 1, Vector3.forward, 1, zombieLayerMask);
+
+            foreach(RaycastHit hit in hits)
+            {
+                if(enemy != null)
+                enemy = Vector3.Distance(hit.collider.gameObject.transform.position, transform.position) < Vector3.Distance(enemy.transform.position, transform.position) ? hit.collider.gameObject: enemy;
+            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
     /// <summary>

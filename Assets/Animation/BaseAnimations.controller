@@ -166,7 +166,7 @@ AnimatorController:
       m_Motion: {fileID: 7400000, guid: 17a5dc191194a4442a40efe56cb9495a, type: 2}
     - serializedVersion: 2
       m_State: {fileID: 1102564512240515490}
-      m_Motion: {fileID: 0}
+      m_Motion: {fileID: 7400000, guid: 661ada26054bf224eb5b1aa5f78ed6d6, type: 2}
     - serializedVersion: 2
       m_State: {fileID: 1102544232536504868}
       m_Motion: {fileID: 7400000, guid: 661ada26054bf224eb5b1aa5f78ed6d6, type: 2}
@@ -188,6 +188,9 @@ AnimatorController:
     - serializedVersion: 2
       m_State: {fileID: 1102005204791955782}
       m_Motion: {fileID: 7400000, guid: 17a5dc191194a4442a40efe56cb9495a, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: 1102511738793251260}
+      m_Motion: {fileID: 7400000, guid: 661ada26054bf224eb5b1aa5f78ed6d6, type: 2}
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: 0
@@ -4090,7 +4093,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: GetUp
-  m_Speed: 1
+  m_Speed: -1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101344267504192828}
