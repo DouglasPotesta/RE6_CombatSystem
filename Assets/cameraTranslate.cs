@@ -23,7 +23,7 @@ public class cameraTranslate : MonoBehaviour {
         }
         
         CompensateForWalls(transform.position, posTarget.transform, player.position, out  TargetPosition);
-        transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * dampPosSpeed);
+        transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.fixedDeltaTime * dampPosSpeed);
         
     }
     /// <summary>

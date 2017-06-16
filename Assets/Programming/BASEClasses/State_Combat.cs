@@ -7,8 +7,8 @@ public class State_Combat : ICharacterState
 {
 
 
-    private float dampVelocity = 0;
-    private float refRotate;
+    //private float dampVelocity = 0;
+    //private float refRotate;
     private StatePatternController player;
     private bool IsAiming = false;
     public State_Combat(StatePatternController controller)
@@ -38,6 +38,9 @@ public class State_Combat : ICharacterState
             else if (!IsAiming)//  Initializes aiming
             {
                 AimStart();
+            } else
+            {
+                player.anim.SetTrigger("Fire");
             }
 
             if (Input.GetButtonDown("Run") && player.speed > 0.8f) // Diving in a direction
@@ -169,9 +172,9 @@ public class State_Combat : ICharacterState
             }
             // we preserve the existing y part of the current velocity.
            
-            v.y = player.rig.velocity.y;
+            v.y = player.navAgent.velocity.y;
             
-            player.rig.velocity = v;
+            player.navAgent.velocity = v;
         }
     }
 

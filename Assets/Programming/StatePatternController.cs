@@ -5,18 +5,34 @@ using UnityEngine.AI;
 
 public class StatePatternController : MonoBehaviour {
 
+    [Header("Camera")]
     public cameraTranslate cam;
     public CamStats camAim;
     public CamStats camRun;
     public CamStats camGround;
     public CamStats camDefault;
+
+    [Header("Components")]
     public Collider col;
     public Animator anim;
     public Rigidbody rig;
     public Transform camTarget;
+    public NavMeshAgent navAgent;
 
+    [Header("Movement Parameters")]
+    public float directionDampTime = 0.1f;
+    public float speedDampTime = 0.1f;
+
+
+    public enum areaMaskBinaries { EVERYTHING = 1, NOTWALKABLE = 2, JUMP = 4, GROUNDABLE = 8 }
+    [Header("NavMesh Limits")]
+    public areaMaskBinaries[] areaMask;
+    public int areaMaskInt { get { int x = 0; foreach (areaMaskBinaries ms in areaMask) { x += (int)ms; } return x; } }
+
+    [Header("Weapons")]
     public WeaponInventory weapons;
 
+    [Header("Feedback (Read Only)")]
     public float direction;
     public bool meleeCool;
     public bool aimCool;
@@ -30,18 +46,13 @@ public class StatePatternController : MonoBehaviour {
     public float dampVelocity;
     public Vector3 velocity;
     public float ATTACKRANGE = 1;
-    public NavMeshHit yHolder;
-    public enum areaMaskBinaries { EVERYTHING = 1, NOTWALKABLE = 2, JUMP = 4, GROUNDABLE = 8 }
+    //public NavMeshHit yHolder;
 
 
-    public areaMaskBinaries[] areaMask;
-    public int areaMaskInt { get { int x =0;  foreach (areaMaskBinaries ms in areaMask) { x += (int)ms; } return x; }}
 
-    public float directionDampTime = 0.1f;
-
-    public float speedDampTime = 0.1f;
 
     public class Zombie : MonoBehaviour { }
+    [Header("Enemy Interaction")]
     public LayerMask zombieLayerMask;
     public GameObject enemy;
 
@@ -66,6 +77,7 @@ public class StatePatternController : MonoBehaviour {
 
 
     void Start () {
+        navAgent = GetComponent<NavMeshAgent>();
         rig = GetComponent<Rigidbody>();
         currentState = combatState;
         StartCoroutine(EnemyCheck());
@@ -90,7 +102,7 @@ public class StatePatternController : MonoBehaviour {
         velocity.x = Input.GetAxis("Horizontal");
         velocity.y = Input.GetAxis("Vertical");
         StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, velocity.x, velocity.y, isPivoting);
-        print(currentState);
+        //print(currentState);
         currentState.Update();
         SetAnimatorLocomotion();
     }
@@ -143,8 +155,8 @@ public class StatePatternController : MonoBehaviour {
     }
     public void FixedUpdate()
     {
-        NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
-        transform.position = yHolder.position;// - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
+        //NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
+        //transform.position = yHolder.position;// - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
 
     }
     /// <summary>
@@ -176,10 +188,10 @@ public class StatePatternController : MonoBehaviour {
     /// <param name="looker"></param>
     /// <param name="target"></param>
     /// <param name="damping"></param>
-    public static void SlerpForMe(Transform looker, Vector3 target, float damping)
+    public static void SlerpForMe(Transform looker, Vector3 target, float damping, float deltaTime)
     {
         var rotation = Quaternion.LookRotation(target - looker.position);
-        looker.transform.rotation = Quaternion.Slerp(looker.transform.rotation, rotation, Time.deltaTime * damping);
+        looker.transform.rotation = Quaternion.Slerp(looker.transform.rotation, rotation, deltaTime * damping);
     }
     /// <summary>
     /// a slerp function for making a target look in a direction based only on the x and z position of the target

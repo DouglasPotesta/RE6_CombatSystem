@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class State_Casual : ICharacterState {
 
-    private float dampVelocity = 0;
+    //private float dampVelocity = 0;
 
     private StatePatternController player;
     public State_Casual(StatePatternController controller)
