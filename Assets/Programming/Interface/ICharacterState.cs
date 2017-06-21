@@ -12,9 +12,11 @@ public interface ICharacterState {
 
     void OnTriggerExit(Collider other);
 
-    void SwitchWeapon(WeaponBehaviour weapon);
+    void SwitchWeapon();
 
     void OnAnimatorMove();
+
+    void OnAnimatorIK(AvatarIKGoal NonDomHand);
 
     // Use this for initialization
     void ToCasual();

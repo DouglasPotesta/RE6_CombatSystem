@@ -13,7 +13,9 @@ public class BASE_Weapon : MonoBehaviour
     public float variance = 0.1f;
     public float delay = 0.01f;
     public float blastsize;
+    public string LayerName = "Pistol";
     public GameObject particle;
+    public Transform NDHandIKTrans;
     public Transform tipOfBarrel;
     public Animator anim;
     public AudioClip fire, click, reload, aim, alternate;
@@ -115,5 +117,10 @@ public class BASE_Weapon : MonoBehaviour
     public void AlternateFire()
     {
         anim.SetTrigger("Alternate");
+    }
+
+    public void HandIK()
+    {
+
     }
 }

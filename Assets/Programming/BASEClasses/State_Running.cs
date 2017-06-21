@@ -51,9 +51,9 @@ public class State_Run : ICharacterState
             }
             // we preserve the existing y part of the current velocity.
 
-            v.y = player.rig.velocity.y;
+            v.y = player.navAgent.velocity.y;
 
-            player.rig.velocity = v;
+            player.navAgent.velocity = v;
         }
     }
 
@@ -72,7 +72,7 @@ public class State_Run : ICharacterState
         throw new NotImplementedException();
     }
 
-    public void SwitchWeapon(WeaponBehaviour weapon)
+    public void SwitchWeapon()
     {
         throw new NotImplementedException();
     }
@@ -115,5 +115,13 @@ public class State_Run : ICharacterState
     public void ToRun()
     {
         throw new NotImplementedException();
+    }
+
+    public void OnAnimatorIK(AvatarIKGoal NonDomHand)
+    {
+        player.anim.SetIKPositionWeight(NonDomHand, 1);
+        player.anim.SetIKRotationWeight(NonDomHand, 1);
+        player.anim.SetIKPosition(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.position);
+        player.anim.SetIKRotation(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.rotation);
     }
 }

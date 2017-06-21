@@ -60,9 +60,9 @@ public class State_Casual : ICharacterState {
 
     }
 
-    public void SwitchWeapon(WeaponBehaviour weapon)
+    public void SwitchWeapon()
     {
-        player.weapons.choice += Input.GetAxis("DHorizontal") > 0 ? 1 : -1;
+        player.weapons.Choice += Input.GetAxis("DHorizontal") > 0 ? 1 : -1;
     }
 
     public void OnTriggerEnter(Collider other)
@@ -129,6 +129,11 @@ public class State_Casual : ICharacterState {
     }
 
     public void ToRun()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnAnimatorIK(AvatarIKGoal NonDomHand)
     {
         throw new NotImplementedException();
     }

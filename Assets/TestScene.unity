@@ -52,10 +52,10 @@ LightmapSettings:
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 0
     m_EnableBakedLightmaps: 0
-    m_EnableRealtimeLightmaps: 0
+    m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 8
-    m_Resolution: 2
+    m_Resolution: 1
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
@@ -86,9 +86,9 @@ LightmapSettings:
     m_PVRFilteringAtrousColorSigma: 1
     m_PVRFilteringAtrousNormalSigma: 1
     m_PVRFilteringAtrousPositionSigma: 1
-  m_LightingDataAsset: {fileID: 112000001, guid: f22fc0f3d2a828b4993f85d296a627e3,
+  m_LightingDataAsset: {fileID: 112000024, guid: f22fc0f3d2a828b4993f85d296a627e3,
     type: 2}
-  m_ShadowMaskMode: 2
+  m_ShadowMaskMode: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1010,6 +1010,21 @@ Prefab:
         type: 2}
       propertyPath: m_AABB.m_Extent.z
       value: 0.29414117
+      objectReference: {fileID: 0}
+    - target: {fileID: 114927984165597484, guid: 45ede40327af1e54cbbad66363b64746,
+        type: 2}
+      propertyPath: blurIterations
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114184811404454270, guid: 45ede40327af1e54cbbad66363b64746,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114927984165597484, guid: 45ede40327af1e54cbbad66363b64746,
+        type: 2}
+      propertyPath: threshold
+      value: 0.119
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 45ede40327af1e54cbbad66363b64746, type: 2}

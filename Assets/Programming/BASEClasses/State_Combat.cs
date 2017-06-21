@@ -9,6 +9,7 @@ public class State_Combat : ICharacterState
 
     //private float dampVelocity = 0;
     //private float refRotate;
+    private bool isPressed = false;
     private StatePatternController player;
     private bool IsAiming = false;
     public State_Combat(StatePatternController controller)
@@ -38,9 +39,12 @@ public class State_Combat : ICharacterState
             else if (!IsAiming)//  Initializes aiming
             {
                 AimStart();
+            } else if(Input.GetAxis("Shoot") > 0.5f)
+            {
+                player.anim.SetBool("Fire", true);
             } else
             {
-                player.anim.SetTrigger("Fire");
+                player.anim.SetBool("Fire", false);
             }
 
             if (Input.GetButtonDown("Run") && player.speed > 0.8f) // Diving in a direction
@@ -53,10 +57,25 @@ public class State_Combat : ICharacterState
             {
                 AimEnd();
             }
-            if (Input.GetAxis("Shoot") > 0.5f)
+            if (Input.GetAxis("Shoot") > 0.1f)
             {
                 player.anim.SetTrigger("Melee");
             }
+        }
+        Debug.Log(Mathf.Abs(Input.GetAxis("DHorizontal")));
+        if (Mathf.Abs(Input.GetAxis("DHorizontal")) >0.5f)
+        {
+
+            if (!isPressed)
+            {
+                SwitchWeapon();
+
+                isPressed = true;
+            }
+        }
+        else
+        {
+            isPressed = false;
         }
     }
 
@@ -83,9 +102,11 @@ public class State_Combat : ICharacterState
         IsAiming = true;
     }
 
-    public void SwitchWeapon(WeaponBehaviour weapon)
+    public void SwitchWeapon()
     {
-        player.weapons.choice += Input.GetAxis("DHorizontal") > 0 ? 1 : -1;
+        player.anim.SetLayerWeight(player.anim.GetLayerIndex(player.weapons.weaponEquiped.LayerName), 0);
+        player.weapons.Choice += Input.GetAxis("DHorizontal") > 0 ? 1 : -1;
+        player.anim.SetLayerWeight(player.anim.GetLayerIndex(player.weapons.weaponEquiped.LayerName), 1);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -178,9 +199,19 @@ public class State_Combat : ICharacterState
         }
     }
 
+
+
     public void ToRun()
     {
         player.InputTransitionCheck();
         player.currentState = player.runState;
+    }
+
+    public void OnAnimatorIK(AvatarIKGoal NonDomHand)
+    {
+        player.anim.SetIKPositionWeight(NonDomHand, 1);
+        player.anim.SetIKRotationWeight(NonDomHand, 1);
+        player.anim.SetIKPosition(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.position);
+        player.anim.SetIKRotation(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.rotation);
     }
 }

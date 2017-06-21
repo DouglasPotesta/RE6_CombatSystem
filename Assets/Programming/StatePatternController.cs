@@ -33,6 +33,7 @@ public class StatePatternController : MonoBehaviour {
     public WeaponInventory weapons;
 
     [Header("Feedback (Read Only)")]
+    public bool isRight = true;
     public float direction;
     public bool meleeCool;
     public bool aimCool;
@@ -150,9 +151,16 @@ public class StatePatternController : MonoBehaviour {
     }
     public void OnAnimatorMove()
     {
-        
         currentState.OnAnimatorMove();
+        
     }
+
+    public void OnAnimatorIK()
+    {
+
+        currentState.OnAnimatorIK(isRight ? AvatarIKGoal.LeftHand : AvatarIKGoal.RightHand);
+    }
+
     public void FixedUpdate()
     {
         //NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);

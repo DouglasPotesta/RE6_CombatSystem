@@ -11,6 +11,11 @@ public class State_Hurt : ICharacterState
         player = controller;
     }
 
+    public void OnAnimatorIK(AvatarIKGoal NonDomHand)
+    {
+        throw new NotImplementedException();
+    }
+
     public void OnAnimatorMove()
     {
         throw new NotImplementedException();
@@ -31,7 +36,7 @@ public class State_Hurt : ICharacterState
         throw new NotImplementedException();
     }
 
-    public void SwitchWeapon(WeaponBehaviour weapon)
+    public void SwitchWeapon()
     {
         throw new NotImplementedException();
     }

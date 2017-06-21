@@ -257,7 +257,7 @@ MonoBehaviour:
   variance: 0.1
   delay: 0.01
   blastsize: 0.1
-  LayerName: Rifle
+  LayerName: Pistol
   particle: {fileID: 1526195627738266, guid: 5240eab31df6d49449efd162be19d550, type: 2}
   tipOfBarrel: {fileID: 4498032642595744}
   anim: {fileID: 95371814220819720}

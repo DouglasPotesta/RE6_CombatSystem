@@ -45,7 +45,7 @@ public class State_Grounded : ICharacterState
         throw new NotImplementedException();
     }
 
-    public void SwitchWeapon(WeaponBehaviour weapon)
+    public void SwitchWeapon()
     {
         throw new NotImplementedException();
     }
@@ -92,15 +92,23 @@ public class State_Grounded : ICharacterState
             // TODO implement look sensitivity changs depending on the state using the script animation layer
             player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight)*Time.deltaTime*x),0)) ;
             // we preserve the existing y part of the current velocity.
-            v.y = player.rig.velocity.y;
+            v.y = player.navAgent.velocity.y;
             v += (player.transform.right * player.velocity.x + player.transform.forward*player.velocity.y);
-            v.y = player.rig.velocity.y;
-            player.rig.velocity = v;
+            v.y = player.navAgent.velocity.y;
+            player.navAgent.velocity = v;
         }
     }
 
     public void ToRun()
     {
         throw new NotImplementedException();
+    }
+
+    public void OnAnimatorIK(AvatarIKGoal NonDomHand)
+    {
+        player.anim.SetIKPositionWeight(NonDomHand, 1);
+        player.anim.SetIKRotationWeight(NonDomHand, 1);
+        player.anim.SetIKPosition(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.position);
+        player.anim.SetIKRotation(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.rotation);
     }
 }
