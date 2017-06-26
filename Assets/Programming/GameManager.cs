@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    public static  float XSENSITIVITY = 1;
+    public static float YSENSITIVITY = 1;
+    public static float sensitivityModifier = 1;
     public static GameManager instance = null;
 
     //Awake is always called before any Start functions

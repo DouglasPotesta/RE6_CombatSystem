@@ -31,7 +31,7 @@ public class State_Combat : ICharacterState
         }
         if (Input.GetAxis ("Aim") > 0.5f) // If player is trying to aim
         {
-            player.LookTowards(player.transform, player.camTarget.position, 10);
+            player.LookTowards(player.transform, player.camState.GetStats().lookTarget.position, 10);
             if (Input.GetAxis("Shoot") > 0.5f && !IsAiming)
             {
                 //TODO implement a quickshot
@@ -62,7 +62,7 @@ public class State_Combat : ICharacterState
                 player.anim.SetTrigger("Melee");
             }
         }
-        Debug.Log(Mathf.Abs(Input.GetAxis("DHorizontal")));
+        //Debug.Log(Mathf.Abs(Input.GetAxis("DHorizontal")));
         if (Mathf.Abs(Input.GetAxis("DHorizontal")) >0.5f)
         {
 
@@ -81,24 +81,29 @@ public class State_Combat : ICharacterState
 
     private void AimEnd()
     {
-        player.StartCoroutine(player.CamTransition(player.camDefault, player.cam));
+        player.camState.ToBasic();
+        /*
         player.cam.posTarget = player.camDefault;
         player.cam.lookTarget = player.camDefault.transform.GetChild(0);
         player.cam.dOF.focalTransform = player.cam.lookTarget;
         player.cam.dOF.enabled = false;
+        */
         player.anim.SetBool("Aim", false);
         IsAiming = false;
     }
 
     private void AimStart()
     {
+        
         player.anim.SetBool("Aim", true);
-        player.StartCoroutine(player.CamTransition(player.camAim, player.cam));
+        /*
+        player.camState.ToAim();
         player.cam.lookTarget = player.camAim.transform.GetChild(0);
         player.cam.dOF.focalTransform = player.cam.lookTarget;
         player.cam.dOF.enabled = true;
         player.cam.dOF.focalSize = 0.4f;
         player.cam.dOF.aperture = 0.507f;
+        */
         IsAiming = true;
     }
 
@@ -140,7 +145,7 @@ public class State_Combat : ICharacterState
     public void ToGround()
     {
         player.InputTransitionCheck();
-        player.StartCoroutine(player.CamTransition(player.camGround, player.cam));
+        player.camState.ToGround();
         player.currentState = player.groundedState;
         //player.StartCoroutine(TransitionTo()); Coroutine implementation 
     }
@@ -204,6 +209,7 @@ public class State_Combat : ICharacterState
     public void ToRun()
     {
         player.InputTransitionCheck();
+        player.camState.ToRun();
         player.currentState = player.runState;
     }
 

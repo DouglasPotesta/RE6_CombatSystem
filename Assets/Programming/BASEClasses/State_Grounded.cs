@@ -90,7 +90,7 @@ public class State_Grounded : ICharacterState
                 camStraight.y = 0;
             float x = Vector3.Cross(player.transform.forward, camStraight).y > 0? 1:-1 ;
             // TODO implement look sensitivity changs depending on the state using the script animation layer
-            player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight)*Time.deltaTime*x),0)) ;
+            player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight.normalized)*Time.deltaTime*x),0)) ;
             // we preserve the existing y part of the current velocity.
             v.y = player.navAgent.velocity.y;
             v += (player.transform.right * player.velocity.x + player.transform.forward*player.velocity.y);
@@ -106,6 +106,7 @@ public class State_Grounded : ICharacterState
 
     public void OnAnimatorIK(AvatarIKGoal NonDomHand)
     {
+        
         player.anim.SetIKPositionWeight(NonDomHand, 1);
         player.anim.SetIKRotationWeight(NonDomHand, 1);
         player.anim.SetIKPosition(NonDomHand, player.weapons.weaponEquiped.NDHandIKTrans.position);

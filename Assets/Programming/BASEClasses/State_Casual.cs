@@ -15,11 +15,11 @@ public class State_Casual : ICharacterState {
 
     public void Update()
     {
-
+        /*
         //player.SetAnimatorLocomotion();
         if (player.aimCool)
         {
-            player.LookTowards(player.transform, player.camTarget.position, 10);
+            player.LookTowards(player.transform, player.cam.lookTarget.position, 10);
         }
         if (Input.GetAxis("Aim")> 0.5f && !player.aimCool)
         {
@@ -57,7 +57,7 @@ public class State_Casual : ICharacterState {
             player.aimCool = false;
             player.anim.SetBool("Aim", false);
         }
-
+        */
     }
 
     public void SwitchWeapon()

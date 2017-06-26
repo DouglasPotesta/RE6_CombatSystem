@@ -46,7 +46,7 @@ public class State_Run : ICharacterState
             {
                 float y;
                     y = player.direction * 360 * Time.deltaTime;
-                player.charRotate.y = y/4;
+                player.charRotate.y = y / 4;
                 player.transform.Rotate(player.charRotate);
             }
             // we preserve the existing y part of the current velocity.
@@ -85,7 +85,7 @@ public class State_Run : ICharacterState
     public void ToCombat()
     {
         player.InputTransitionCheck();
-
+        player.camState.ToBasic();
         player.anim.SetBool("Sprint", false);
         player.currentState = player.combatState;
     }
@@ -93,7 +93,7 @@ public class State_Run : ICharacterState
     public void ToGround()
     {
         player.InputTransitionCheck();
-        player.StartCoroutine(player.CamTransition(player.camGround, player.cam));
+        player.camState.ToGround();
         player.currentState = player.groundedState;
     }
 
