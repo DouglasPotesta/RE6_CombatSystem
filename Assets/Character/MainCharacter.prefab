@@ -425,7 +425,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1234754451588186
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 114278451549888556}
   - component: {fileID: 114927984165597484}
   - component: {fileID: 114184811404454270}
+  - component: {fileID: 114087649228995860}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1770,7 +1771,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1512765045990026}
   m_LocalRotation: {x: -0.18854667, y: -0.0000000036283638, z: 8.442528e-10, w: 0.9820643}
-  m_LocalPosition: {x: 0.236, y: -0.19600001, z: -0.8749999}
+  m_LocalPosition: {x: 0.236, y: 0.1, z: -0.8749999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4900339192059930}
@@ -1966,7 +1967,7 @@ Transform:
   - {fileID: 4116903095014270}
   - {fileID: 4973369716186490}
   m_Father: {fileID: 4428156513115042}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4331186371770550
 Transform:
@@ -2033,6 +2034,7 @@ Transform:
   m_LocalPosition: {x: 71.89293, y: -0.117068864, z: 83.61454}
   m_LocalScale: {x: 0.88, y: 0.88, z: 0.88}
   m_Children:
+  - {fileID: 4873621171484498}
   - {fileID: 4877417482377438}
   - {fileID: 4329320432819218}
   m_Father: {fileID: 0}
@@ -2361,7 +2363,7 @@ Transform:
   - {fileID: 4120801099206526}
   - {fileID: 4075137100650962}
   m_Father: {fileID: 4877417482377438}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4620943251348212
 Transform:
@@ -2745,11 +2747,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234754451588186}
-  m_LocalRotation: {x: -0.18854667, y: -0.0000000036283638, z: 8.442528e-10, w: 0.9820643}
-  m_LocalPosition: {x: 0.29995716, y: -0.34001946, z: -0.640017}
+  m_LocalRotation: {x: 0.015269637, y: -0.00000595193, z: 0.00000009089382, w: 0.9998834}
+  m_LocalPosition: {x: 0.36390477, y: 1.4082495, z: -0.24977598}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4877417482377438}
+  m_Father: {fileID: 4428156513115042}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4875237220653984
@@ -2772,14 +2774,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1113568298005280}
-  m_LocalRotation: {x: -0.1805248, y: 0.7526941, z: -0.23042774, w: -0.5897165}
-  m_LocalPosition: {x: -4.91954, y: 1.248471, z: 6.4595633}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.42410845, y: -0.0000036303172, z: 0.000007751924, w: 0.9056114}
+  m_LocalPosition: {x: 0.06391352, y: 1.1343176, z: 0.42114258}
+  m_LocalScale: {x: 1, y: 0.99999976, z: 0.99999976}
   m_Children:
-  - {fileID: 4873621171484498}
   - {fileID: 4619416312870100}
   m_Father: {fileID: 4428156513115042}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4881861269855786
 Transform:
@@ -3428,6 +3429,36 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114087649228995860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1234754451588186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfeebf93c5fdd764fb7c5406a5e1a9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CamPivot: {fileID: 4877417482377438}
+  dOF: {fileID: 114731424354272762}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 2304
+  playerFocalSpot: {fileID: 4973369716186490}
+  targetPosition: {x: 0, y: 0, z: 0}
+  wallPosition: {x: 0, y: 0, z: 0}
+  FOV: 60
+  snap: 0
+  lookTargetPosition: {x: 0, y: 0, z: 0}
+  blur: 0
+  yMin: 0
+  yMax: 0
+  xLocked: 0
+  CameraSlerpDamp: 0.1
+  xRot: 0
+  yRot: 0
+  timeInTransition: 0
 --- !u!114 &114093146217772438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3460,14 +3491,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce2c05858e8f594da179afc5bfd688c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampSpeed: 10
+  transitionLength: 0.5
   MouseSensitivity: 1
-  transitionSpeed: 20
   FOV: 60
-  snap: 0
   lookTarget: {fileID: 4051298366316642}
-  blur: 0
-  yMin: -90
+  isDepthOfField: 0
+  focalSize: 0
+  aperture: 0
+  shouldCameraShake: 0
+  cameraShake:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yMin: -20
   yMax: 90
   xLocked: 0
 --- !u!114 &114178633775548520
@@ -3517,7 +3555,7 @@ MonoBehaviour:
   blurSize: 1
   blurIterations: 1
   blurType: 0
-  fastBloomShader: {fileID: 0}
+  fastBloomShader: {fileID: 4800000, guid: 68a00c837b82e4c6d92e7da765dc5f1d, type: 3}
 --- !u!114 &114187568934041410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3566,16 +3604,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 20535005446285978}
   CamPivot: {fileID: 4877417482377438}
+  camState: {fileID: 114087649228995860}
   camAim: {fileID: 114689252627478212}
   camRun: {fileID: 114842148949175346}
   camGround: {fileID: 114480142221479562}
   camDefault: {fileID: 114144069329928764}
+  TransitionStats: {fileID: 0}
+  CamStateDebugString: null
   yRot: 0
   xRot: 0
-  TransitionStats: {fileID: 0}
   CameraCollisionLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2304
   col: {fileID: 136370927238507752}
   anim: {fileID: 95552718531770094}
   rig: {fileID: 54379185106248860}
@@ -3633,15 +3673,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce2c05858e8f594da179afc5bfd688c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampSpeed: 10
+  transitionLength: 0.5
   MouseSensitivity: 0.4
-  transitionSpeed: 20
-  FOV: 60
-  snap: 0
+  FOV: 50
   lookTarget: {fileID: 4900339192059930}
-  blur: 0
-  yMin: -90
-  yMax: 90
+  isDepthOfField: 1
+  focalSize: 0.43
+  aperture: 0.5
+  shouldCameraShake: 1
+  cameraShake:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: -0.000098073215
+      value: -0.00008612638
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.63801634
+      value: 0.000051170588
+      inSlope: -0.0143395765
+      outSlope: -0.0143395765
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.8467015
+      value: 0.003841352
+      inSlope: 0.032551855
+      outSlope: 0.032551855
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9795963
+      value: 0.000026304653
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 3
+    m_PostInfinity: 3
+    m_RotationOrder: 0
+  yMin: 0
+  yMax: 60
   xLocked: 0
 --- !u!114 &114689252627478212
 MonoBehaviour:
@@ -3654,14 +3725,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce2c05858e8f594da179afc5bfd688c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampSpeed: 10
+  transitionLength: 0.5
   MouseSensitivity: 0.3
-  transitionSpeed: 20
-  FOV: 60
-  snap: 0
+  FOV: 50
   lookTarget: {fileID: 4170830672475252}
-  blur: 0
-  yMin: -90
+  isDepthOfField: 1
+  focalSize: 0.43
+  aperture: 0.5
+  shouldCameraShake: 0
+  cameraShake:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yMin: -20
   yMax: 90
   xLocked: 0
 --- !u!114 &114701194691321100
@@ -3676,14 +3754,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 4973369716186490}
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: -0.12, z: 0}
 --- !u!114 &114731424354272762
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234754451588186}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd70d448b18cfbc46af26466f752332c, type: 3}
   m_Name: 
@@ -3717,14 +3795,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce2c05858e8f594da179afc5bfd688c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampSpeed: 10
+  transitionLength: 0.5
   MouseSensitivity: 0.1
-  transitionSpeed: 20
-  FOV: 60
-  snap: 0
+  FOV: 70
   lookTarget: {fileID: 4501664771907586}
-  blur: 0
-  yMin: -90
+  isDepthOfField: 0
+  focalSize: 0.3
+  aperture: 0.5
+  shouldCameraShake: 0
+  cameraShake:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  yMin: -20
   yMax: 90
   xLocked: 0
 --- !u!114 &114851254158670230
@@ -3760,17 +3845,17 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234754451588186}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4975a6e437fc3b149a8cd508ce5bdd69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshold: 0.25
-  intensity: 0.75
-  blurSize: 1
+  threshold: 0.174
+  intensity: 0.659
+  blurSize: 1.09
   blurIterations: 1
   blurType: 0
-  fastBloomShader: {fileID: 0}
+  fastBloomShader: {fileID: 4800000, guid: 68a00c837b82e4c6d92e7da765dc5f1d, type: 3}
 --- !u!124 &124182429177308098
 Behaviour:
   m_ObjectHideFlags: 1

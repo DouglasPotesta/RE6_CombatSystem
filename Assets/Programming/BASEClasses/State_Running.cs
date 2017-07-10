@@ -36,7 +36,7 @@ public class State_Run : ICharacterState
             ToCombat();
         }
     }
-
+    // TODO implement character rotation with both the right and left sticks. 
     public void OnAnimatorMove()
     {
         if (Time.deltaTime > 0)
@@ -85,7 +85,7 @@ public class State_Run : ICharacterState
     public void ToCombat()
     {
         player.InputTransitionCheck();
-        player.camState.ToBasic();
+        player.camState.TargetCamStats = player.camDefault;
         player.anim.SetBool("Sprint", false);
         player.currentState = player.combatState;
     }
@@ -93,7 +93,7 @@ public class State_Run : ICharacterState
     public void ToGround()
     {
         player.InputTransitionCheck();
-        player.camState.ToGround();
+        player.camState.TargetCamStats = player.camGround;
         player.currentState = player.groundedState;
     }
 

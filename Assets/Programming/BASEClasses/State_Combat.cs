@@ -31,7 +31,7 @@ public class State_Combat : ICharacterState
         }
         if (Input.GetAxis ("Aim") > 0.5f) // If player is trying to aim
         {
-            player.LookTowards(player.transform, player.camState.GetStats().lookTarget.position, 10);
+            player.LookTowards(player.transform, player.camState.TargetCamStats.lookTarget.position, 10);
             if (Input.GetAxis("Shoot") > 0.5f && !IsAiming)
             {
                 //TODO implement a quickshot
@@ -81,7 +81,7 @@ public class State_Combat : ICharacterState
 
     private void AimEnd()
     {
-        player.camState.ToBasic();
+        player.camState.TargetCamStats = player.camDefault;
         /*
         player.cam.posTarget = player.camDefault;
         player.cam.lookTarget = player.camDefault.transform.GetChild(0);
@@ -96,6 +96,7 @@ public class State_Combat : ICharacterState
     {
         
         player.anim.SetBool("Aim", true);
+        player.camState.TargetCamStats = player.camAim;
         /*
         player.camState.ToAim();
         player.cam.lookTarget = player.camAim.transform.GetChild(0);
@@ -145,7 +146,7 @@ public class State_Combat : ICharacterState
     public void ToGround()
     {
         player.InputTransitionCheck();
-        player.camState.ToGround();
+        player.camState.TargetCamStats = player.camGround;
         player.currentState = player.groundedState;
         //player.StartCoroutine(TransitionTo()); Coroutine implementation 
     }
@@ -209,7 +210,7 @@ public class State_Combat : ICharacterState
     public void ToRun()
     {
         player.InputTransitionCheck();
-        player.camState.ToRun();
+        player.camState.TargetCamStats = player.camRun;
         player.currentState = player.runState;
     }
 

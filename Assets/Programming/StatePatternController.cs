@@ -9,25 +9,22 @@ public class StatePatternController : MonoBehaviour {
     public Camera cam;
     public Transform CamPivot;
 
+    public CameraController camState;
+
     public CamStats camAim;
     public CamStats camRun;
     public CamStats camGround;
     public CamStats camDefault;
+    [HideInInspector]
+    public CamStats TransitionStats;
+    public string CamStateDebugString = "null";
 
     public  float yRot;
     public float xRot;
 
-    [HideInInspector]
-    public CamStats TransitionStats;
+
 
     public LayerMask CameraCollisionLayer;
-
-    public CS_Aim CAimState;
-    public CS_Basic CBasicState;
-    public CS_Ground CGroundState;
-    public CS_Run CRunState;
-    public CS_Transition CTransition;
-    public ICameraState camState;
 
     [Header("Components")]
     public Collider col;
@@ -90,12 +87,7 @@ public class StatePatternController : MonoBehaviour {
         combatState = new State_Combat(this);
         interactionState = new State_Interaction(this);
         runState = new State_Run(this);
-
-        CAimState = new CS_Aim(this, camAim);
-        CBasicState = new CS_Basic(this, camDefault);
-        CGroundState = new CS_Ground(this, camGround);
-        CRunState = new CS_Run(this, camRun);
-        CTransition = new CS_Transition(this);
+        camState.TargetCamStats = camDefault;
     }
 
 
@@ -103,9 +95,7 @@ public class StatePatternController : MonoBehaviour {
         navAgent = GetComponent<NavMeshAgent>();
         rig = GetComponent<Rigidbody>();
         currentState = combatState;
-        camState = CBasicState;
-        TransitionStats = new GameObject("Transition Stats").AddComponent<CamStats>();
-        TransitionStats.lookTarget = new GameObject().transform;
+
 
         StartCoroutine(EnemyCheck());
 	}
@@ -131,20 +121,10 @@ public class StatePatternController : MonoBehaviour {
         StickToWorldSpace(transform, cam.transform, ref direction, ref speed, ref charAngle, velocity.x, velocity.y, isPivoting);
         //print(currentState);
         currentState.Update();
-        camState.Update();
         SetAnimatorLocomotion();
+    }
 
-    }
-    public void FixedUpdate()
-    {
-        //NavMesh.SamplePosition(transform.position, out yHolder, 0.5f, areaMaskInt);
-        //transform.position = yHolder.position;// - Vector3.up*0.03f;//Vector3.Lerp(transform.position, yHolder.position, 0.01f); // new Vector3(transform.position.x, yHolder.position.y, transform.position.z);
-        camState.FixedUpdate();
-    }
-    public void LateUpdate()
-    {
-        camState.LateUpdate();
-    }
+
     /// <summary>
     /// Used for grabbing items and breaking item boxes
     /// </summary>
@@ -199,35 +179,6 @@ public class StatePatternController : MonoBehaviour {
         currentState.OnAnimatorIK(isRight ? AvatarIKGoal.LeftHand : AvatarIKGoal.RightHand);
     }
 
-
-    /// <summary>
-    /// Controls the camera's transition from one state to the next.
-    /// </summary>
-    /// <param name="camStat"> the target containing the new information for the camera</param>
-    /// <param name="cam">The camera to transition</param>
-    /// <returns></returns>
-    public IEnumerator CamTransition(CamStats oldCamStats, CamStats newCamStat, ICameraState newCamState, Camera cam) // remove this for a callable function in update
-    {
-        camState = CTransition;
-        TransitionStats.dampSpeed = newCamStat.transitionSpeed;
-        // TODO fix this so that way the rotation of the camera is consistent throughout the transition
-        TransitionStats.lookTarget.position = oldCamStats.lookTarget.position;
-        float x = 0;
-        x = 0;
-        while (x < 1)
-        {
-            x += Time.deltaTime*1.5f;
-            TransitionStats.dampSpeed = Mathf.Lerp(TransitionStats.dampSpeed, newCamStat.dampSpeed, x);
-            GameManager.sensitivityModifier = Mathf.Lerp(oldCamStats.MouseSensitivity, newCamStat.MouseSensitivity, x);
-            cam.fieldOfView = Mathf.Lerp(oldCamStats.FOV, newCamStat.FOV, x);
-            TransitionStats.yMax = Mathf.Lerp(oldCamStats.yMax, newCamStat.yMax, x);
-            TransitionStats.yMin = Mathf.Lerp(oldCamStats.yMin, newCamStat.yMin, x);
-            TransitionStats.transform.position = Vector3.Lerp(TransitionStats.transform.position, newCamStat.transform.position, x);
-            TransitionStats.lookTarget.position = Vector3.Lerp(oldCamStats.lookTarget.position, newCamStat.lookTarget.position, x);
-            yield return new WaitForEndOfFrame();
-        }
-        camState = newCamState;
-    }
     /// <summary>
     /// a basic slerp function for making targets smoothly look at other targets
     /// </summary>

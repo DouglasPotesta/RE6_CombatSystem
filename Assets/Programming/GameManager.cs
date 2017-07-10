@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static  float XSENSITIVITY = 1;
-    public static float YSENSITIVITY = 1;
+    public static  float XSENSITIVITY = 10;
+    public static float YSENSITIVITY = 10;
     public static float sensitivityModifier = 1;
     public static GameManager instance = null;
 
