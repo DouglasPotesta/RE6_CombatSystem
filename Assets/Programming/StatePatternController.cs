@@ -29,7 +29,6 @@ public class StatePatternController : MonoBehaviour {
     [Header("Components")]
     public Collider col;
     public Animator anim;
-    public Rigidbody rig;
     public NavMeshAgent navAgent;
 
     [Header("Movement Parameters")]
@@ -93,7 +92,6 @@ public class StatePatternController : MonoBehaviour {
 
     void Start () {
         navAgent = GetComponent<NavMeshAgent>();
-        rig = GetComponent<Rigidbody>();
         currentState = combatState;
 
 
@@ -164,13 +162,10 @@ public class StatePatternController : MonoBehaviour {
         angleRootToMove /= 180;
         directionOut = angleRootToMove;
         Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), MoveDirection, Color.red, 0.1f);
-
-
     }
     public void OnAnimatorMove()
     {
         currentState.OnAnimatorMove();
-        
     }
 
     public void OnAnimatorIK()
@@ -237,7 +232,6 @@ public class StatePatternController : MonoBehaviour {
     /// </summary>
     public void InputTransitionCheck()
     {
-
         // Firing and Melee bools
         if (Input.GetAxis("Aim") > 0.5f)
         {
@@ -273,6 +267,5 @@ public class StatePatternController : MonoBehaviour {
         {
             anim.SetBool("Sprint", false);
         }
-
     }
 }

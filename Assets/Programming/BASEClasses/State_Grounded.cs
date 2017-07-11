@@ -86,16 +86,27 @@ public class State_Grounded : ICharacterState
         if (Time.deltaTime > 0)
         {
             Vector3 v = (player.anim.deltaPosition) / Time.deltaTime;
-                Vector3 camStraight = player.cam.transform.forward;
-                camStraight.y = 0;
-            float x = Vector3.Cross(player.transform.forward, camStraight).y > 0? 1:-1 ;
-            // TODO implement look sensitivity changs depending on the state using the script animation layer
-            player.transform.Rotate (new Vector3(0,(Vector3.Angle(player.transform.forward, camStraight.normalized)*Time.deltaTime*x),0)) ;
-            // we preserve the existing y part of the current velocity.
+
             v.y = player.navAgent.velocity.y;
-            v += (player.transform.right * player.velocity.x + player.transform.forward*player.velocity.y);
+            v += (player.transform.right * player.velocity.x + player.transform.forward * player.velocity.y) + new Vector3 (v.x, 0, v.z);
             v.y = player.navAgent.velocity.y;
-            player.navAgent.velocity = v;
+            if (player.speed > 0.1f) // when the player is not pivoting he 
+            {
+                float y;
+                y = player.direction * 360 * Time.deltaTime;
+                player.charRotate.y = Input.GetAxis("CameraX") * 180 / 4 * Time.deltaTime;
+                player.transform.Rotate(player.charRotate);
+                player.navAgent.velocity = v/3;
+            } else
+            {
+                float y;
+                y = player.direction * 360 * Time.deltaTime;
+                player.charRotate.y = Input.GetAxis("CameraX") * 180 / 2 * Time.deltaTime;
+                player.transform.Rotate(player.charRotate);
+                player.navAgent.velocity = v;
+            }
+
+
         }
     }
 

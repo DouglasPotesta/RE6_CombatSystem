@@ -5,7 +5,6 @@ using UnityStandardAssets.ImageEffects;
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour {
 
-
     private Camera cam;
     public Camera Cam
     {
@@ -55,22 +54,13 @@ public class CameraController : MonoBehaviour {
     public Vector3 lookTargetPosition;
     public float blur;
 
-
-
-
     public float yMin;
     public float yMax;
     public bool xLocked = false;
 
-
-
     public float CameraSlerpDamp = 0.1f;
-
-
     public float xRot = 0;
     public float yRot = 0;
-
-
 
     public float timeInTransition = 0;
 
@@ -120,8 +110,6 @@ public class CameraController : MonoBehaviour {
     public void CameraTranslation(float deltaTime)
     {
 
-
-
         targetPosition = Vector3.Lerp(targetPosition, TargetCamStats.transform.position, transitionTimeFrame);
 
         wallPosition = CompensateForWalls(Cam.transform.position, targetPosition, playerFocalSpot.position, wallMask);
@@ -166,7 +154,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-
+    float yRotVelocity = 0;
     public void CameraPivotRotation(float deltaTime)
     {
         xRot = Mathf.Clamp(Input.GetAxis("CameraY") *
@@ -176,12 +164,18 @@ public class CameraController : MonoBehaviour {
                 GameManager.sensitivityModifier +
                 xRot,
                 yMin, yMax);
-
-        yRot += Input.GetAxis("CameraX") * 
-            deltaTime * 
-            20 * 
-            GameManager.XSENSITIVITY * 
-            GameManager.sensitivityModifier;
+        if (targetCamStats.xLocked)
+        {
+            yRot = Mathf.SmoothDampAngle(yRot, playerFocalSpot.eulerAngles.y, ref yRotVelocity, targetCamStats.transitionLength);
+        }
+        else
+        {
+            yRot += Input.GetAxis("CameraX") *
+                deltaTime *
+                20 *
+                GameManager.XSENSITIVITY *
+                GameManager.sensitivityModifier;
+        }
 
         CamPivot.eulerAngles = new Vector3(xRot, yRot, CamPivot.eulerAngles.z);
 

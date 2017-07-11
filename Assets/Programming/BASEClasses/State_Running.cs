@@ -46,7 +46,8 @@ public class State_Run : ICharacterState
             {
                 float y;
                     y = player.direction * 360 * Time.deltaTime;
-                player.charRotate.y = y / 4;
+                player.charRotate.y = Mathf.Abs(player.direction*2) > Mathf.Abs(Input.GetAxis("CameraX")) ?
+                    y / 4 : Input.GetAxis("CameraX") * 180/4*Time.deltaTime;
                 player.transform.Rotate(player.charRotate);
             }
             // we preserve the existing y part of the current velocity.

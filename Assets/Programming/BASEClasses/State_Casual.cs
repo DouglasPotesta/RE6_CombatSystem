@@ -123,8 +123,7 @@ public class State_Casual : ICharacterState {
                 player.transform.Rotate(0, player.direction * 360 * Time.deltaTime, 0);
             }
             // we preserve the existing y part of the current velocity.
-            v.y = player.rig.velocity.y;
-            player.rig.velocity = v;
+
         }
     }
 
